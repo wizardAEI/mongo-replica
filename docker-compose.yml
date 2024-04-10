@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:4.4.28
+    container_name: mongo
+    volumes:
+      - ./data/db:/data/db
+      - ./mongo-keyfile:/etc/ssl/mongodb-keyfile
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    entrypoint:
+      - bash
+      - -c
+      - |
+        cp /etc/ssl/mongodb-keyfile /etc/ssl/replica.key
+        chmod 400 /etc/ssl/replica.key
+        chown 999:999 /etc/ssl/replica.key
+        exec docker-entrypoint.sh $$@ 
+    command: "mongod --replSet rs0 --keyFile /etc/ssl/replica.key"
