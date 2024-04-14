@@ -19,4 +19,4 @@ services:
         chmod 400 /etc/ssl/replica.key
         chown 999:999 /etc/ssl/replica.key
         exec docker-entrypoint.sh $$@ 
-    command: "mongod --replSet rs0 --keyFile /etc/ssl/replica.key"
+    command: "mongod --replSet rs0 --keyFile /etc/ssl/replica.key --bind_ip 0.0.0.0"
